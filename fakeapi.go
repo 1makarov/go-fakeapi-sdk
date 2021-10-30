@@ -19,18 +19,18 @@ const (
 )
 
 type FakeApi struct {
-	a *api
+	api *api
 }
 
 func New() *FakeApi {
 	t := newTransport()
 	a := newAPI(t)
 
-	return &FakeApi{a: a}
+	return &FakeApi{api: a}
 }
 
 func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
-	body, code, err := f.a.call(endDefault, fmt.Sprintf(endGetPostByID, ID), http.MethodGet, nil)
+	body, code, err := f.api.call(endDefault, fmt.Sprintf(endGetPostByID, ID), http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
 }
 
 func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
-	body, code, err := f.a.call(endDefault, endGetAllPosts, http.MethodGet, nil)
+	body, code, err := f.api.call(endDefault, endGetAllPosts, http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
 }
 
 func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
-	body, code, err := f.a.call(endDefault, endCreatePost, http.MethodPost, p)
+	body, code, err := f.api.call(endDefault, endCreatePost, http.MethodPost, p)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
 }
 
 func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
-	body, code, err := f.a.call(endDefault, fmt.Sprintf(endUpdatePost, p.PostID), http.MethodPut, p)
+	body, code, err := f.api.call(endDefault, fmt.Sprintf(endUpdatePost, p.PostID), http.MethodPut, p)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +106,7 @@ func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
 }
 
 func (f *FakeApi) DeletePostByID(ID int) error {
-	_, code, err := f.a.call(endDefault, fmt.Sprintf(endDeletePost, ID), http.MethodDelete, nil)
+	_, code, err := f.api.call(endDefault, fmt.Sprintf(endDeletePost, ID), http.MethodDelete, nil)
 	if err != nil {
 		return err
 	}

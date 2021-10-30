@@ -9,5 +9,5 @@ func newAPI(caller *transport) *api {
 }
 
 func (api *api) call(url, raw, method string, body interface{}) ([]byte, int, error) {
-	return api.caller.Call(url, raw, method, body)
+	return api.caller.call(url, raw, method, body)
 }

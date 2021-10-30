@@ -10,7 +10,7 @@ type PostOutput struct {
 }
 
 func (p *PostOutput) String() string {
-	return fmt.Sprintf("UserID: %d, PostID: %d, Title: %s, Body: %s\n", p.UserID, p.PostID, p.Title, p.Body)
+	return fmt.Sprintf("UserID: %d, PostID: %d, Title: %s, Body: %s", p.UserID, p.PostID, p.Title, p.Body)
 }
 
 type PostCreateInput struct {
