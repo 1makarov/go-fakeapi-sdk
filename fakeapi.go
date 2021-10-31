@@ -15,28 +15,26 @@ const (
 	endUpdatePost  = "posts/%d"
 	endDeletePost  = "posts/%d"
 
-	errorLoadPage = "error, status_code: %d"
+	errLoadPage = "error, status_code: %d"
 )
 
 type FakeApi struct {
-	api *api
+	transport *transport
 }
 
 func New() *FakeApi {
 	t := newTransport()
-	a := newAPI(t)
 
-	return &FakeApi{api: a}
+	return &FakeApi{transport: t}
 }
 
 func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
-	body, code, err := f.api.call(endDefault, fmt.Sprintf(endGetPostByID, ID), http.MethodGet, nil)
+	body, code, err := f.transport.call(endDefault, fmt.Sprintf(endGetPostByID, ID), http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
-
 	if code != http.StatusOK {
-		return nil, fmt.Errorf(errorLoadPage, code)
+		return nil, fmt.Errorf(errLoadPage, code)
 	}
 
 	var post PostOutput
@@ -49,13 +47,12 @@ func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
 }
 
 func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
-	body, code, err := f.api.call(endDefault, endGetAllPosts, http.MethodGet, nil)
+	body, code, err := f.transport.call(endDefault, endGetAllPosts, http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
-
 	if code != http.StatusOK {
-		return nil, fmt.Errorf(errorLoadPage, code)
+		return nil, fmt.Errorf(errLoadPage, code)
 	}
 
 	var posts []PostOutput
@@ -68,13 +65,12 @@ func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
 }
 
 func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
-	body, code, err := f.api.call(endDefault, endCreatePost, http.MethodPost, p)
+	body, code, err := f.transport.call(endDefault, endCreatePost, http.MethodPost, p)
 	if err != nil {
 		return nil, err
 	}
-
 	if code != http.StatusCreated {
-		return nil, fmt.Errorf(errorLoadPage, code)
+		return nil, fmt.Errorf(errLoadPage, code)
 	}
 
 	var post PostOutput
@@ -87,13 +83,12 @@ func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
 }
 
 func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
-	body, code, err := f.api.call(endDefault, fmt.Sprintf(endUpdatePost, p.PostID), http.MethodPut, p)
+	body, code, err := f.transport.call(endDefault, fmt.Sprintf(endUpdatePost, p.PostID), http.MethodPut, p)
 	if err != nil {
 		return nil, err
 	}
-
 	if code != http.StatusOK {
-		return nil, fmt.Errorf(errorLoadPage, code)
+		return nil, fmt.Errorf(errLoadPage, code)
 	}
 
 	var post PostOutput
@@ -106,13 +101,12 @@ func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
 }
 
 func (f *FakeApi) DeletePostByID(ID int) error {
-	_, code, err := f.api.call(endDefault, fmt.Sprintf(endDeletePost, ID), http.MethodDelete, nil)
+	_, code, err := f.transport.call(endDefault, fmt.Sprintf(endDeletePost, ID), http.MethodDelete, nil)
 	if err != nil {
 		return err
 	}
-
 	if code != http.StatusOK {
-		return fmt.Errorf(errorLoadPage, code)
+		return fmt.Errorf(errLoadPage, code)
 	}
 
 	return nil

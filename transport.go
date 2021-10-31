@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+const errMethodNotFound = "method not found: %s"
+
 type transport struct {
 	client http.Client
 }
@@ -28,7 +30,7 @@ func (t *transport) call(url, raw, method string, body interface{}) ([]byte, int
 	case method == http.MethodPost || method == http.MethodPut:
 		return t.post(url, raw, method, body)
 	default:
-		return nil, 0, fmt.Errorf("no found method: %s", method)
+		return nil, 0, fmt.Errorf(errMethodNotFound, method)
 	}
 }
 
