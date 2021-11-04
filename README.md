@@ -1,6 +1,6 @@
 ## Installation
 ```sh
-go get -u github.com/1makarov/go-fakeapi-client
+go get -u github.com/1makarov/go-fakeapi-sdk
 ```
 
 ### Initialization

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/1makarov/go-fakeapi-client"
+	"github.com/1makarov/go-fakeapi-sdk"
 )
 
 func main() {

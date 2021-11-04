@@ -1,4 +1,4 @@
-module github.com/1makarov/go-fakeapi-client
+module github.com/1makarov/go-fakeapi-sdk
 
 go 1.17
 
