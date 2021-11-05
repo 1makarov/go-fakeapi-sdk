@@ -18,17 +18,17 @@ const (
 	errLoadPage = "error, status_code: %d"
 )
 
-type FakeApi struct {
+type Client struct {
 	transport *transport
 }
 
-func New() *FakeApi {
-	t := newTransport()
-
-	return &FakeApi{transport: t}
+func New() *Client {
+	return &Client{
+		transport: newTransport(),
+	}
 }
 
-func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
+func (f *Client) GetPostByID(ID int) (*PostOutput, error) {
 	body, code, err := f.transport.call(endDefault, fmt.Sprintf(endGetPostByID, ID), http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (f *FakeApi) GetPostByID(ID int) (*PostOutput, error) {
 	return &post, nil
 }
 
-func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
+func (f *Client) GetAllPosts() ([]PostOutput, error) {
 	body, code, err := f.transport.call(endDefault, endGetAllPosts, http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (f *FakeApi) GetAllPosts() ([]PostOutput, error) {
 	return posts, nil
 }
 
-func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
+func (f *Client) CreatePost(p PostCreateInput) (*PostOutput, error) {
 	body, code, err := f.transport.call(endDefault, endCreatePost, http.MethodPost, p)
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func (f *FakeApi) CreatePost(p PostCreateInput) (*PostOutput, error) {
 	return &post, nil
 }
 
-func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
+func (f *Client) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
 	body, code, err := f.transport.call(endDefault, fmt.Sprintf(endUpdatePost, p.PostID), http.MethodPut, p)
 	if err != nil {
 		return nil, err
@@ -100,7 +100,7 @@ func (f *FakeApi) UpdatePost(p PostUpdateInput) (*PostOutput, error) {
 	return &post, nil
 }
 
-func (f *FakeApi) DeletePostByID(ID int) error {
+func (f *Client) DeletePostByID(ID int) error {
 	_, code, err := f.transport.call(endDefault, fmt.Sprintf(endDeletePost, ID), http.MethodDelete, nil)
 	if err != nil {
 		return err

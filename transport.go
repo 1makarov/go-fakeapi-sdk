@@ -24,10 +24,10 @@ func newTransport() *transport {
 }
 
 func (t *transport) call(url, raw, method string, body interface{}) ([]byte, int, error) {
-	switch {
-	case method == http.MethodGet || method == http.MethodDelete:
+	switch method {
+	case http.MethodGet, http.MethodDelete:
 		return t.get(url, raw, method)
-	case method == http.MethodPost || method == http.MethodPut:
+	case http.MethodPost, http.MethodPut:
 		return t.post(url, raw, method, body)
 	default:
 		return nil, 0, fmt.Errorf(errMethodNotFound, method)
