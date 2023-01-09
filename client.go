@@ -22,68 +22,40 @@ func New(url string, http *http.Client) *Client {
 }
 
 func (c *Client) get(url string, out interface{}, needStatusCode ...int) error {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return err
-	}
-
-	return c.call(req, out, needStatusCode...)
+	return c.call(url, http.MethodGet, "", nil, out, needStatusCode...)
 }
 
 func (c *Client) delete(url string, out interface{}, needStatusCode ...int) error {
-	req, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return err
-	}
-
-	return c.call(req, out, needStatusCode...)
-} 
+	return c.call(url, http.MethodDelete, "", nil, out, needStatusCode...)
+}
 
 func (c *Client) post(url string, in, out interface{}, needStatusCode ...int) error {
-	var body []byte
-
-	if in != nil {
-		var err error
-
-		body, err = json.Marshal(in)
-		if err != nil {
-			return err
-		}
-	}
-
-	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
-	if err != nil {
-		return err
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	return c.call(req, out, needStatusCode...)
+	return c.call(url, http.MethodPost, "application/json", in, out, needStatusCode...)
 }
 
 func (c *Client) put(url string, in, out interface{}, needStatusCode ...int) error {
+	return c.call(url, http.MethodPut, "application/json", in, out, needStatusCode...)
+}
+
+func (c *Client) call(url, method, contentType string, in, out interface{}, needStatusCode ...int) (err error) {
 	var body []byte
 
 	if in != nil {
-		var err error
-
 		body, err = json.Marshal(in)
 		if err != nil {
 			return err
 		}
 	}
 
-	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Content-Type", "application/json")
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
 
-	return c.call(req, out, needStatusCode...)
-}
-
-func (c *Client) call(req *http.Request, out interface{}, needStatusCode ...int) error {
 	resp, err := c.http.Do(req)
 	if err != nil {
 		return err
