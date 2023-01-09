@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/1makarov/go-fakeapi-sdk"
 )
 
 func main() {
-	fake := fakeapi.New()
+	client := fakeapi.New(fakeapi.Endpoint, http.DefaultClient)
 
-	post, err := fake.GetPostByID(1)
+	post, err := client.GetPostByID(1)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(post.String())
+	fmt.Println(post.UserID, post.Title)
 }
