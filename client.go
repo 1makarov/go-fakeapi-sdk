@@ -17,8 +17,16 @@ type Client struct {
 	http *http.Client
 }
 
-func New(url string, http *http.Client) *Client {
-	return &Client{url: url, http: http}
+func New(url string, http *http.Client) (*Client, error) {
+	if url == "" {
+		return nil, fmt.Errorf("empty url")
+	}
+
+	if http == nil {
+		return nil, fmt.Errorf("empty http client")
+	}
+
+	return &Client{url: url, http: http}, nil
 }
 
 func (c *Client) get(url string, out interface{}, needStatusCode ...int) error {

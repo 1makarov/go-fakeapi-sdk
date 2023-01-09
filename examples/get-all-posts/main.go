@@ -8,7 +8,10 @@ import (
 )
 
 func main() {
-	client := fakeapi.New(fakeapi.Endpoint, http.DefaultClient)
+	client, err := fakeapi.New(fakeapi.Endpoint, http.DefaultClient)
+	if err != nil {
+		panic(err)
+	}
 
 	posts, err := client.GetAllPosts()
 	if err != nil {

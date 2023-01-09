@@ -5,7 +5,7 @@ go get -u github.com/1makarov/go-fakeapi-sdk
 
 ### Initialization
 ```go
-client = fakeapi.New(fakeapi.Endpoint, http.DefaultClient)
+client, err := client.New(fakeapi.Endpoint, http.DefaultClient)
 ```
 
 ### Get Post By ID
